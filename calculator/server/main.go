@@ -6,9 +6,10 @@ import (
 
 	pb "github.com/markraiter/grpc/calculator/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
-var addr string = "0.0.0.0:50051"
+var addr string = "localhost:50051"
 
 type Server struct {
 	pb.CalculatorServiceServer
@@ -24,6 +25,7 @@ func main() {
 
 	s := grpc.NewServer()
 	pb.RegisterCalculatorServiceServer(s, &Server{})
+	reflection.Register(s)
 
 	if err = s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v\n", err)
